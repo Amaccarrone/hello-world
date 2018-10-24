@@ -8,7 +8,6 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.common.by import By
 from random import randint
 
-
 class toni(unittest.TestCase):
 # >>> Web browser Section
 
@@ -16,22 +15,30 @@ class toni(unittest.TestCase):
         self.driver = webdriver.Chrome('chromedriver.exe')
         self.driver.maximize_window()
         self.driver.get("https://www.instagram.com/accounts/login/?hl=es")
-        time.sleep(1)
+        self.driver.implicitly_wait(5)
 
 # >>> Login Section
 #self.user.send_keys('USER1234')
         self.user = self.driver.find_element_by_name('username')
-        self.user.send_keys('tonymaccarroneph')
+        self.user.send_keys('tonymaccarrone')
 
 #self.password.send_keys('PASS1234')
         self.password = self.driver.find_element_by_name('password')
         self.password.send_keys('antonio22')
 
+
 # >>> Hashtag Section
-        self.password.send_keys(Keys.ENTER)
-        location = input('Location: ')
+        loginbutton = self.driver.find_element_by_xpath('/html/body/span/section/main/div/article/div/div[1]/div/form/div[3]/button')
+        loginbutton.click()
+        self.driver.implicitly_wait(5)
+
+        notificationsoff = self.driver.find_element_by_css_selector('button.aOOlW.HoLwm')
+        notificationsoff.click()
+        self.driver.implicitly_wait(5)
+
+        hashtag = input('Hastag: ')
         time.sleep(1.3)
-        self.driver.get('https://www.instagram.com/explore/locations/'+location+'/?hl=es')
+        self.driver.get('https://www.instagram.com/explore/tags/'+hashtag+'/?hl=es')
         self.driver.implicitly_wait(10)
         element = self.driver.find_element_by_class_name('_9AhH0')
         try:
@@ -47,7 +54,7 @@ class toni(unittest.TestCase):
         user.send_keys(Keys.CONTROL + Keys.ENTER)
         self.driver.switch_to.window(self.driver.window_handles[1])
         print(self.driver.current_url)
-        time.sleep(1.05)
+        self.driver.implicitly_wait(3)
         self.driver.close()
         self.driver.switch_to.window(self.driver.window_handles[0])
         print(self.driver.current_url)

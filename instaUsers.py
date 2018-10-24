@@ -9,11 +9,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from excelData import *
+from selenium.webdriver import ActionChains
 
 
 class toni(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Chrome('chromedriver.exe')
+        self.actions = ActionChains(self.driver)
         self.driver.maximize_window()
         self.driver.get("https://www.instagram.com/accounts/login/?hl=es")
         self.driver.implicitly_wait(5)
@@ -39,7 +41,7 @@ class toni(unittest.TestCase):
 
     def detectVideo(self):
         try:
-            self.driver.find_element_by_class_name('zV_Nj')
+            self.driver.find_element_by_xpath("//button[@class='oF4XW sqdOP yWX7d    _8A5w5   ']")
             a = True
         except NoSuchElementException:
             a = False
@@ -53,19 +55,19 @@ class toni(unittest.TestCase):
                 self.detectVideo()
             except NoSuchElementException:
                 pass
-        userThatLikes = self.driver.find_element_by_class_name('zV_Nj')
+        userThatLikes = self.driver.find_element_by_xpath("//button[@class='oF4XW sqdOP yWX7d    _8A5w5   ']")
         qty = userThatLikes.text
         print('\n')
         print(qty, 'sin modificar')
         userThatLikes.click()
         self.driver.implicitly_wait(5)
         qty = re.sub("[^0-9]", "", qty)
-        qty = int(qty)
+        qty= int(qty)
         rango = int(qty/10)
         if qty > 10:
             for x in range(0, rango*3):
-                xpath = 'wFPL8 '
-                scroll = self.driver.find_elements_by_class_name(xpath)
+                class_name = 'wFPL8 '
+                scroll = self.driver.find_elements_by_class_name(class_name)
                 self.driver.implicitly_wait(5)
 
                 try:
@@ -121,7 +123,7 @@ class toni(unittest.TestCase):
                 pass
 
             elif self.driver.current_url in return_excelValue('Lista'):
-                print(return_excelValue,'Ya esta en la lista')
+                print('Ya esta en la lista')
 
             elif self.driver.current_url in return_excelValue('Cruda'):
                 print('Ya esta en la lista')
@@ -135,9 +137,14 @@ class toni(unittest.TestCase):
                     pass
 
                 try:
-                    self.driver.find_element_by_class_name('_9AhH0').click()
+                    foto = self.driver.find_elements_by_xpath("//div[@class='_9AhH0']")
                 except NoSuchElementException:
-                    pass
+                    foto = self.driver.find_elements_by_xpath("//div[@class='KL4Bh']")
+
+                foto = foto[0]
+                self.driver.execute_script("return arguments[0].scrollIntoView();", foto)
+                time.sleep(3)
+                foto.click()
                 self.driver.implicitly_wait(5)
                 for x in range(0, 5):
                     self.LikeForUsers()
